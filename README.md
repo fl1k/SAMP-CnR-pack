@@ -10,5 +10,5 @@ Requirements:
 ( https://cdn.discordapp.com/attachments/601730131140280361/601730229005975552/SAMPFUNCS.asi )
 
 Precompiled stuff included in "precompiled" section
-
+// All explanations for how to use in: https://discord.gg/zEJpCVm 
 // fl1k#2523
