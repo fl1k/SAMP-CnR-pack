@@ -9,7 +9,7 @@ UNTIL SAMP.Available()
 
 //0BE3: raknet setup_incoming_rpc_hook @RPCINCOMINGHOOK
 //0B34: samp register_client_command "aregister" to_label @AUTOREGISTER
-0B34: samp register_client_command "wn" to_label @WORKNIGGER
+0B34: samp register_client_command "wn" to_label @WNN
 30@ = 0
 29@ = 0
 
@@ -190,7 +190,7 @@ else
 end
 SAMP.CmdRet()
 
-:WORKNIGGER
+:WNN
 if
 30@ == 0
 then
