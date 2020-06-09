@@ -1,0 +1,83 @@
+{$CLEO .cs}
+
+0000:
+  
+REPEAT
+   WAIT 0
+UNTIL 0AFA:  SAMP_IS_READY
+
+0B34: samp register_client_command "autotk" to_label @toggle
+
+var
+   7@ : Float
+end 
+ 
+while true
+    wait 0
+    if
+    30@ == false
+    then
+        if
+        056D:   actor $PLAYER_ACTOR defined 
+        then
+            0A8D: 0@ = read_memory 0xB74490 size 4 virtual_protect 0
+            000A: 0@ += 0x4
+            0A8D: 0@ = read_memory 0@ size 4 virtual_protect 0
+            for 1@ = 0 to 35584 step 0x100
+                0A8D: 2@ = read_memory 0@ size 1 virtual_protect 0
+                000A: 0@ += 0x1
+                if and
+                0029:  2@ >= 0x00 
+                001B:  0x80 > 2@
+                then 
+                    005A: 2@ += 1@
+                    if and
+                    803B:   not 2@ == $PLAYER_ACTOR
+                    056D:   actor 2@ defined
+                    then
+                        00A0: store_actor $PLAYER_ACTOR position_to 3@ 4@ 5@
+                        00A0: store_actor 2@ position_to 6@ 7@ 8@
+                        050A: 9@ = distance_between_XYZ 3@ 4@ 5@ and_XYZ 6@ 7@ 8@
+                        if
+                        9@ <= 15.0 
+                        then
+                            alloc 12@ 50
+                            alloc 13@ 50
+                            0B2B: samp 10@ = get_player_id_by_actor_handle 2@
+                            0B37: samp 11@ = get_player_color 10@
+                            0AD3: 12@ = format "%x" 11@
+                            if
+                            0C29: $NOT_USED = stristr string1 12@ string2 "96FFFF00"
+                            then
+                                0A8D: 14@ = read_memory 0x00B6F1A8 size 2 vp 0
+                                if
+                                14@ == 4
+                                then
+                                    0AD3: 13@ = format "/tk %d" 10@
+                                    0AF9: samp say_msg 13@
+                                    wait 500
+                                end
+                            end
+                            free 12@
+                            free 13@
+                        end
+                    end 
+                end
+            end
+        end
+    else
+        wait 1000
+    end        
+end
+
+:toggle
+if
+30@ == false
+then
+    30@ = true
+    0AF8: samp add_message_to_chat "{006000}[Auto /tk]{FFFFFF} Toggled off!" color 0x006000
+else
+    30@ = false
+    0AF8: samp add_message_to_chat "{006000}[Auto /tk]{FFFFFF} Toggled on!" color 0x006000
+end
+samp.CmdRet

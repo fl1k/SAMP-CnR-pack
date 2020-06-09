@@ -1,0 +1,75 @@
+{$CLEO .cs}
+//fl1ko <3
+0000:
+  
+REPEAT
+   WAIT 0
+UNTIL 0AFA:  SAMP_IS_READY
+
+0B34: samp register_client_command "hitemesp" to_label @toggle
+
+alloc 18@ 128
+0B6D: render 20@ = create_font "Arial" height 12 flags  0x4 
+  
+WHILE TRUE
+    wait 0
+    if
+    30@ == false
+    then
+        0BB9: samp 1@ = get_pickup_pool_ptr
+        0A8D: 2@ = read_memory 1@ size 4 virtual_protect 0 // PickupsCount
+        if 
+        2@ > 0
+        then
+            0A8E: 2@ = 1@ + 0x4 // ul_GTA_PickupID
+            0A8E: 3@ = 1@ + 0xF004 // stPickup
+            for 4@ = 0 to 4095 step 1
+                0A90: 5@ = 4@ * 4
+                005A: 5@ += 2@
+                0A8D: 5@ = read_memory 5@ size 4 virtual_protect 0
+                if 
+                5@ <> 0
+                then
+                    0A90: 5@ = 4@ * 20
+                    005A: 5@ += 3@
+                    0A8D: 5@ = read_memory 5@ size 4 virtual_protect 0 // pickupModel        
+                    if
+                    5@ == 1276
+                    then
+                        if 
+                        0B51: samp 6@ = pickup_handle_by_id 4@
+                        then
+                            065B: store_pickup 6@ position_to 7@ 8@ 9@
+                            if 
+                            00C2:   sphere_onscreen 7@ 8@ 9@  radius 0.0
+                            then
+                                Actor.StorePos($PLAYER_ACTOR, 12@, 13@, 14@)
+                                0B55: convert_3D_coords 7@ 8@ 9@ to_screen 10@ 11@
+                                0B55: convert_3D_coords 12@ 13@ 14@ to_screen 15@ 16@
+                                0B68: render draw_line_point1 10@ 11@ point2 15@ 16@ width 1 color 0xCAFABC02
+                                050A: 17@ = distance_between_XYZ 12@ 13@ 14@ and_XYZ 7@ 8@ 9@
+                                0AED: 0@v = float 17@ to_string_format "%.3G"
+                                format 18@ "Hidden Item(%sm)" 0@v
+                                0B6F: render font 20@ draw_text 18@ pos 10@ 11@ color 0xCAFABC02
+                            end
+                        end    
+                    end
+                end
+            end
+        end
+    end
+END
+
+
+:toggle
+if
+30@ == false
+then
+    30@ = true
+    0AF8: samp add_message_to_chat "{006000}[Hidden Item Finder]{FFFFFF} Toggled off!" color 0xFFFFFF
+else
+    30@ = false
+    0AF8: samp add_message_to_chat "{006000}[Hidden Item Finder]{FFFFFF} Toggled on!" color 0xFFFFFF
+end
+samp.CmdRet
+

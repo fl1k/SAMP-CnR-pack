@@ -1,0 +1,75 @@
+{$CLEO .cs}
+0000:
+// helo my name fl1k no virus here!
+REPEAT
+   WAIT 0
+UNTIL 0AFA:  SAMP_IS_READY
+ 
+0B34: samp register_client_command "rc" to_label @ratio
+
+0AF8: samp add_message_to_chat "{006000}[Ratio Calculator] {FFFFFF}Running LS-CNR ratio calculator by fl1k - /rc"
+
+while 0C17: $NOT_USED = strlen "fl1k" == 0C17: $NOT_USED = strlen "god_" 
+    wait 420420
+end
+
+var
+    2@ : Integer
+    3@ : Integer
+    4@ : Float
+    5@ : Float
+    6@ : Integer
+    7@ : Float   
+    8@ : Float
+    9@ : Float
+    10@ : Integer
+    11@ : Integer
+    12@ : Integer
+end
+
+:ratio
+0@ = 95
+32@ = true
+while 0@ > 1
+    0AC8: 1@ = allocate_memory_size 260
+    0B75: samp get_chat_string 0@ text_to 1@ prefix_to $NOT_USED color_to $NOT_USED prefix_color_to $NOT_USED
+    if
+    0AD4: $NOT_USED = scan_string 1@ format "[ACCOUNT] Admin: %d, Kills: %d, Deaths: %d, %s" $NOT_USED 2@ 3@ $NOT_USED
+    then
+        alloc 11@ 200
+        0093: 4@ = integer 2@ to_float
+        12@ = 2@
+        0093: 5@ = integer 3@ to_float
+        0073: 4@ =/ 5@
+        0AED: 0@v = float 4@ to_string_format "%.6G"
+        4@ *= 100.0 
+        0092: 6@ = float 4@ to_integer
+        0093: 7@ = integer 6@ to_float
+        7@ /= 100.00               
+        8@ = 7@
+        8@ += 0.01
+        9@ = 7@
+        10@ = 2@
+        while 8@ >= 9@
+            10@++
+            0093: 9@ = integer 10@ to_float
+            9@ /= 5@                    
+        end      
+        10@ -= 12@                                 
+        0AD3: 11@ = format "{006000}[Ratio Calculator]{FFFFFF} Current ratio: %s, kills needed for ratio increase: %d" 0@v 10@
+        0AF8: samp add_message_to_chat 11@ color 0x006000
+        free 11@
+        0@ = 0
+        32@ = false     
+    end
+    0@--
+end
+
+if
+32@ == true
+then
+    0AF8: samp add_message_to_chat "[Ratio Calculator] First use /stats command on someone or yourself retard" color 0xc80000
+end
+
+SAMP.CmdRet
+

@@ -1,0 +1,51 @@
+{$CLEO .cs}
+0000: NOP
+// fl1ko <3
+
+REPEAT
+   WAIT 0
+UNTIL 0AFA:  SAMP_IS_READY 
+alloc 3@ 128
+WHILE TRUE
+    WAIT 0
+     
+    if and
+    056D:   actor $PLAYER_ACTOR defined
+    8B21: 	not samp is_chat_opened        
+    then
+        //sellguns num 8
+        if
+        key_down 104
+        then
+           0AB5: store_actor $PLAYER_ACTOR closest_vehicle_to $NOT_USED closest_ped_to 1@
+            if 
+            056D:   actor 1@ defined
+            then
+                2@ = SAMP.GetSAMPPlayerIDByActorHandle(1@)
+                format 3@ "/sellgun %d" 2@
+                0AF9: samp say_msg 3@
+                wait 400
+            end 
+        end
+        
+        //look num 9
+            if
+            key_down 105
+            then
+                4@ = 0
+                0AF9: samp say_msg "/look"
+                while 4@ < 50             
+                    if
+                    0B4C:  samp is_dialog_active -1
+                    then                    
+                        0B49: samp set_current_dialog_list_item 7 
+                        0B47: samp close_current_dialog_with_button 1
+                        4@+=100
+                    end
+                    4@++
+                    wait 10
+                end
+                wait 400
+            end
+        end    
+END
