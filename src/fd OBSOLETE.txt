@@ -1,9 +1,8 @@
 {$CLEO .cs}
 
-//-------------MAIN---------------
 0000: NOP
 wait 0 
-0B34: samp register_client_command "wn" to_label @worknigger
+0B34: samp register_client_command "wn" to_label @wnn
 30@ = 0 
 
 :MAIN
@@ -61,7 +60,7 @@ end
 :gotomain
 goto @MAIN
 
-:worknigger
+:wnn
 30@ = 1 
 SAMP.CmdRet
 
