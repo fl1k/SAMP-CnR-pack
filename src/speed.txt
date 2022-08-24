@@ -1,0 +1,230 @@
+{$CLEO}
+{$INCLUDE SF}
+
+0000:
+
+REPEAT
+    wait 0
+UNTIL SAMP.Available()
+
+//0BE3: raknet setup_incoming_rpc_hook @RPCINCOMINGHOOK
+//0B34: samp register_client_command "aregister" to_label @AUTOREGISTER
+0B34: samp register_client_command "wn" to_label @WNN
+30@ = 0
+29@ = 0
+
+WHILE TRUE
+    WAIT 0
+    if
+    30@ == 1
+    then    
+        24@ = 0
+        0AF9: samp say_msg "/buy"
+        while 24@ < 100
+            0972: put_actor $PLAYER_ACTOR at -32.65 -186.72 1010.73    
+            0AF9: samp say_msg "/buy"
+            wait 10
+            if 
+            0B4C:  samp is_dialog_active -1
+            then
+                24@ = 1000
+            end
+            24@++            
+            wait 10
+        end
+        0B49: samp set_current_dialog_list_item 12 
+        0B47: samp close_current_dialog_with_button 1
+        wait 100   
+        0972: put_actor $PLAYER_ACTOR at 378.01 -1800.55 4.86
+        wait 600
+        24@ = 0
+        0AF9: samp say_msg "/drugvendor"
+        while 24@ < 100
+            if 
+            0B4C:  samp is_dialog_active -1
+            then
+                24@ = 1000
+            end
+            24@++
+            wait 3
+        end
+        0B49: samp set_current_dialog_list_item 2
+        wait 50 
+        0B47: samp close_current_dialog_with_button 1
+        wait 50
+        24@ = 0
+        while 24@ < 100
+            if 
+            0B4C:  samp is_dialog_active -1
+            then
+                24@ = 1000
+            end
+            24@++
+            wait 3
+        end
+        0B4B: samp set_current_dialog_editbox_text "5" 
+        0B47: samp close_current_dialog_with_button 1      
+        wait 50
+        0972: put_actor $PLAYER_ACTOR at 1955.04 199.45 31.85
+        wait 700
+        for 0@ = 0 to 4 step 1
+            0AF9: samp say_msg "/plantseed"
+            wait 500
+        end
+        for 0@ = 0 to 4 step 1
+            0AF9: samp say_msg "/fertilize"
+            wait 500           
+        end
+        30@ = 0
+        24@ = 0
+        wait 1000
+        while 24@ < 2000
+            if 
+            0B4C:  samp is_dialog_active -1
+            then
+                24@ = 3000
+            end
+            24@++
+            wait 10
+        end
+        0B47: samp close_current_dialog_with_button 1
+        0209: 1@ = random_int_in_ranges 1 69101 
+        format 2@v "%d" 1@ 
+        0AF4: 3@v = read_string_from_ini_file "CLEO\names.ini" section "NAMES" key 2@v 
+        SAMP.Disconnect(0)
+        SAMP.SetLocalNickname(3@v)
+        wait 500 
+        SAMP.SetGameState(1) = "NAMES"
+        24@ = 0
+        23@ = 0
+        while 23@ < 1000
+            if 
+            0B4C:  samp is_dialog_active -1
+            then
+                alloc 27@ 260
+                alloc 26@ 64
+                0BD8: samp get_dialog_caption 27@
+                0209: 25@ = random_int_in_ranges 100 32000
+                format 26@ "%d" 25@
+                if
+                0C29: $NOT_USED = stristr string1 27@ string2 "Register"
+                then
+                    0B4B: samp set_current_dialog_editbox_text 26@
+                    wait 50
+                    0B47: samp close_current_dialog_with_button 1
+                    24@ = 0
+                    wait 200
+                    while 24@ < 10
+                        if 
+                        0B61:  samp is_local_player_spawned
+                        then
+                            24@ = 1000
+                        end
+                        //0BD0: samp send_request_spawn
+                        0AF6: samp spawn_player
+                        24@++
+                        wait 100      
+                    end
+            //0B61:  samp is_local_player_spawned
+            //0BD0: samp send_request_spawn
+                    23@ = 1000
+                end        
+            end
+            23@++
+            wait 10
+        end
+         
+        24@ = 0
+        while 24@ < 1500
+            if 
+            0B61:  samp is_local_player_spawned
+            then
+                30@ = 1
+                24@ = 10000            
+            end
+            24@++
+            wait 10
+        end                         
+    end
+    
+    if and
+    29@ == 1
+    0B4C:  samp is_dialog_active -1
+    then
+        alloc 27@ 260
+        alloc 26@ 64
+        0BD8: samp get_dialog_caption 27@
+        0209: 25@ = random_int_in_ranges 100 32000
+        format 26@ "%d" 25@
+        if
+        0C29: $NOT_USED = stristr string1 27@ string2 "Register"
+        then
+            0B4B: samp set_current_dialog_editbox_text 26@
+            wait 50
+            0B47: samp close_current_dialog_with_button 1
+            24@ = 0
+            while 24@ < 100
+                if 
+                0B61:  samp is_local_player_spawned
+                then
+                    24@ = 1000
+                end
+                //0BD0: samp send_request_spawn
+                0AF6: samp spawn_player
+                24@++
+                wait 3      
+            end
+            //0B61:  samp is_local_player_spawned
+            //0BD0: samp send_request_spawn
+        end        
+    end
+END
+
+:AUTOREGISTER
+if
+29@ == 0
+then
+    29@ = 1
+else
+    29@ = 0
+end
+SAMP.CmdRet()
+
+:WNN
+if
+30@ == 0
+then
+    30@ = 1
+else
+    30@ = 0
+end
+SAMP.CmdRet()
+
+:RPCINCOMINGHOOK
+if
+29@ == 1
+then
+    alloc 26@ 64
+    0BE5: raknet 28@ = get_hook_param PARAM_PACKETID
+    format 26@ "%d" 28@
+    //0AF8: samp add_message_to_chat 26@
+    if 
+    28@ == 61
+    then
+        0AF8: samp add_message_to_chat "Something shoul happen.. 2?"
+        alloc 27@ 260
+        alloc 26@ 64
+        0209: 25@ = random_int_in_ranges 100 32000
+        format 26@ "%d" 25@
+        if
+        0C29: $NOT_USED = stristr string1 27@ string2 "Register"
+        then
+            0B4B: samp set_current_dialog_editbox_text 26@
+        end
+    end
+end
+0BE0: raknet hook_ret true
+
+:RELOAD
+0A93: end_custom_thread
+SAMP.CmdRet()

@@ -1,0 +1,76 @@
+{$CLEO .cs}
+0000: NOP
+// fl1ko <3
+
+REPEAT
+   WAIT 0
+UNTIL 0AFA:  SAMP_IS_READY 
+
+WHILE TRUE
+    WAIT 0
+    if and
+    056D:   actor $PLAYER_ACTOR defined
+    8B21: 	not samp is_chat_opened        
+    then
+        //taze num 1
+        if
+        key_down 97
+        then
+           0AB5: store_actor $PLAYER_ACTOR closest_vehicle_to $NOT_USED closest_ped_to 1@
+            if 
+            056D:   actor 1@ defined
+            then
+                2@ = SAMP.GetSAMPPlayerIDByActorHandle(1@)
+                0AD3: 0@v = format "/ta %d" 2@
+                0AF9: samp say_msg 0@v
+                wait 400
+            end 
+        end
+        
+        //cuff num 2
+        if
+        key_down 98
+        then
+            0AF9: samp say_msg "/cuff"
+            wait 400
+        end
+        
+        //arrest num 3
+        if
+        key_down 99
+        then
+            0AF9: samp say_msg "/ar"
+            wait 400
+        end
+        
+        //uncuff num 5
+        if
+        key_down 101
+        then
+           0AB5: store_actor $PLAYER_ACTOR closest_vehicle_to $NOT_USED closest_ped_to 1@
+            if 
+            056D:   actor 1@ defined
+            then
+                2@ = SAMP.GetSAMPPlayerIDByActorHandle(1@)
+                0AD3: 0@v = format "/uncuff %d" 2@
+                0AF9: samp say_msg 0@v
+                wait 400
+            end 
+        end
+        
+        //search / frisk num 6
+        if
+        key_down 102
+        then
+           0AB5: store_actor $PLAYER_ACTOR closest_vehicle_to $NOT_USED closest_ped_to 1@
+            if 
+            056D:   actor 1@ defined
+            then
+                2@ = SAMP.GetSAMPPlayerIDByActorHandle(1@)
+                0AD3: 0@v = format "/search %d" 2@
+                0AF9: samp say_msg 0@v
+                wait 400
+            end 
+        end            
+    end 
+END

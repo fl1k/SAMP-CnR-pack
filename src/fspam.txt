@@ -1,0 +1,58 @@
+{$CLEO}
+
+0000:
+
+REPEAT
+    wait 0
+UNTIL SAMP.Available()
+
+alloc 0@ 256
+format 0@ "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM123456789"
+30@ = false
+0B34: samp register_client_command "fspam" to_label @TOGGLE
+
+WHILE TRUE
+    WAIT 0
+    if 
+    30@ == true
+    then
+        
+        alloc 1@ 121
+        0AB1: call_scm_func @random_string param_count 3 string 0@ length 120 text_start_pointer 1@
+        alloc 2@ 128        
+        format 2@ "=%s" 1@
+        free 1@
+        0AF9: samp say_msg 2@
+        free 2@
+    end
+END
+
+:random_string
+{
+    0@ = string
+    1@ = length
+    2@ = text start pointer
+}
+0C17: 3@ = strlen 0@
+for 4@ = 0 to 1@
+    0085: 5@ = 0@
+    0209: 6@ = random_int_in_ranges 0 3@
+    005A: 5@ += 6@    
+    0A8D: 7@ = read_memory 5@ size 1 virtual_protect 1 
+    0A8C: write_memory 2@ size 1 value 7@ virtual_protect 1
+    2@++    
+end
+0A8C: write_memory 2@ size 1 value 0 virtual_protect 1 
+0AB2: ret 0
+
+:TOGGLE
+if
+30@ == false
+then
+    30@ = true
+    0AF8: samp add_message_to_chat "{006000}[Auto fchat spammer]{FFFFFF} Toggled on!" color 0x006000
+else
+    30@ = false
+    0AF8: samp add_message_to_chat "{006000}[Auto fchat spammer]{FFFFFF} Toggled off!" color 0x006000
+end
+samp.CmdRet

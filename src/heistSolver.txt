@@ -1,0 +1,79 @@
+{$CLEO .cs}
+
+0000:
+
+REPEAT
+   WAIT 0
+UNTIL 0AFA:  SAMP_IS_READY 
+0AF8: samp add_message_to_chat "hSolver loaded." color 16716947
+WHILE TRUE
+WAIT 0
+
+if
+0B4C:  samp is_dialog_active -1
+then
+    WAIT 0
+    alloc 0@ 260
+    0BD8: samp get_dialog_caption 0@
+    if
+    0C29: $NOT_USED = stristr string1 0@ string2 "Insert the code"
+    then
+        alloc 21@ 512
+        0BD7: samp get_dialog_text 21@
+        call @GetCode 1 WriteStringPointer 21@ ReturnCode 21@
+        alloc 20@ 30
+        0A8E: 21@ = 21@ + 9
+        format 20@ "%s" 21@
+        0B4A: samp 32@ = get_current_dialog_editbox_text
+        0B4B: samp set_current_dialog_editbox_text 20@
+        free 20@ 
+    end
+    IF
+    0C29: $NOT_USED = stristr string1 0@ string2 "Hack the pad"
+    then
+        alloc 21@ 512
+        0BD7: samp get_dialog_text 21@           
+        0AB1: @GetCode 1 String 21@ rnt 22@
+        0AB1: @SkipFirstCharacters 2 String 22@ Characters 1 rnt 23@
+        0AB1: @DeleteLastChars 2 String 23@ Characters 85
+        0B4A: samp 32@ = get_current_dialog_editbox_text 
+        0B4B: samp set_current_dialog_editbox_text 23@
+    end
+    WAIT 1000                                                          
+end
+
+END 
+
+:GetCode
+0C17: 31@ = strlen 0@
+31@ -= 1
+    for 30@ = 0 to 31@
+    0A8D: 29@ = read_memory 0@ size 1 virtual_protect 1 
+     
+        if
+        29@ == 58
+        then
+            0@++
+            ret 1 0@                                                        
+        end    
+
+    0@++
+    end
+ret 0
+
+
+:SkipFirstCharacters
+005A: 0@ += 1@
+0AB2: ret 1 0@
+
+:DeleteLastChars
+var
+0@: int
+1@: int
+2@: int
+end
+0C17: 2@ = strlen 0@
+2@ -= 1@
+0@ += 2@
+0C11: memset 0@ 0 1@
+ret 0

@@ -1,0 +1,20 @@
+{$CLEO .cs}
+
+0000:
+
+REPEAT
+   WAIT 0
+UNTIL 0AFA:  SAMP_IS_READY 
+
+WHILE TRUE
+    WAIT 0
+
+    if
+    key_down 103
+    then
+        04C4: store_coords_to 0@ 1@ 2@ from_actor $PLAYER_ACTOR with_offset 0.0 0.0 0.0 
+        0980: extinguish_all_fires_at 0@ 1@ 2@ radius 100.0
+        wait 1
+    end
+    wait 50
+END

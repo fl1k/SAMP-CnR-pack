@@ -1,0 +1,119 @@
+{$CLEO .cs}
+
+//-------------MAIN---------------
+0000: NOP
+wait 0
+0B34: samp register_client_command "hb" to_label @hb 
+0B34: samp register_client_command "h1" to_label @h1
+0B34: samp register_client_command "h2" to_label @h2
+0B34: samp register_client_command "h21" to_label @h21
+0B34: samp register_client_command "h22" to_label @h22
+0B34: samp register_client_command "h23" to_label @h23
+0B34: samp register_client_command "h24" to_label @h24
+0B34: samp register_client_command "h25" to_label @h25
+0B34: samp register_client_command "h26" to_label @h26
+0B34: samp register_client_command "h3" to_label @h3
+0B34: samp register_client_command "h4" to_label @h4
+20@ = 0
+:MAIN
+wait 0
+if
+20@ == 1
+then
+    00A0: store_actor $PLAYER_ACTOR position_to 1@ 2@ 3@
+    000F: 1@ -= 5.12
+    0972: put_actor $PLAYER_ACTOR at 1@ 2@ 3@
+    wait 300
+    000B: 1@ += 5.12
+    0972: put_actor $PLAYER_ACTOR at 1@ 2@ 3@
+    20@=0
+end 
+SAMP.IsCommandTyped(4@)
+jump @gotomain
+
+var
+1@ : Float
+2@ : Float
+3@ : Float
+end
+
+:gotomain
+goto @MAIN
+
+:hb
+20@=1
+wait 10
+SAMP.CmdRet
+
+ :h21
+0972: put_actor $PLAYER_ACTOR at 2146.69 1629.51 993.58
+wait 10
+//2146.6890,1629.5134,993.5761
+SAMP.CmdRet
+
+:h22
+0972: put_actor $PLAYER_ACTOR at 2147.1 1633.01 993.58
+wait 10
+//2147.0510,1633.0051,993.5761
+SAMP.CmdRet
+
+:h23
+0972: put_actor $PLAYER_ACTOR at 2147.44 1637.27 993.58
+wait 10
+//2146.4390,1637.2672,993.5761
+SAMP.CmdRet
+
+:h24
+0972: put_actor $PLAYER_ACTOR at 2141.2 1629.46 993.58
+wait 10
+//2141.2017,1629.4657,993.5761
+SAMP.CmdRet
+
+:h25
+0972: put_actor $PLAYER_ACTOR at 2141.21 1633.11 993.58
+wait 10
+//2141.2117,1633.2273,993.5761
+SAMP.CmdRet
+
+:h26
+0972: put_actor $PLAYER_ACTOR at 2141.1 1636.95 993.58
+wait 10
+//2141.9937,1636.9462,993.5761
+SAMP.CmdRet
+
+//2315.2371,-0.7542,26.7422
+:h1
+//2315.5425,-0.6833,26.7422
+0972: put_actor $PLAYER_ACTOR at 2315.54 -0.68 27.7
+wait 10
+SAMP.CmdRet
+
+:h2
+0972: put_actor $PLAYER_ACTOR at 2143.92 1629.74 993.58
+wait 10
+//2143.9153,1629.7397,993.5761
+SAMP.CmdRet
+
+:h3
+0972: put_actor $PLAYER_ACTOR at 2147.64 1604.14 1006.1677
+//2147.6414,1604.1359,1006.1677,21
+wait 10
+SAMP.CmdRet
+
+:h4
+0972: put_actor $PLAYER_ACTOR at 2308.92 -14.98 26.74
+//2308.9170,-14.9731,26.7422
+wait 10
+SAMP.CmdRet
+
+:FAKE_KEYPRESS
+if 0AA2: 2@ = load_library "User32.dll"
+then
+    if 0AA4: 2@ = get_proc_address "keybd_event" library 2@
+    then
+        0AA5: call 2@ num_params 4 pop 0 0 0 0 0@
+        wait 1@
+        0AA5: call 2@ num_params 4 pop 0 0 0x02 0 0@
+    end
+end
+0AB2: ret 0

@@ -1,0 +1,86 @@
+{$CLEO .cs}
+
+0000: NOP
+wait 0 
+0B34: samp register_client_command "wn" to_label @wnn
+30@ = 0 
+
+:MAIN
+wait 0 
+if or
+  30@ == 1 
+  30@ == 2 
+  30@ == 3 
+jf @MAIN 
+   SAMP.IsCommandTyped(4@)
+if 
+  30@ == 1 
+jf @gotomain
+0972: put_actor $PLAYER_ACTOR at 531.16 -1759.94 14.29  // -26.01 -185.59 1003.55        -25.86 -182.63 1003.55     /531.1561,-1759.9384,14.2866
+wait 2500
+0AF9: samp say_msg "/buy"
+for 0@ = 0 to 16 step 1
+    0AB1: @FAKE_KEYPRESS 2 key 0x28 20
+end
+wait 50
+0B47: samp close_current_dialog_with_button 1
+wait 100
+0972: put_actor $PLAYER_ACTOR at -25.86 -182.63 1003.55
+wait 250
+0972: put_actor $PLAYER_ACTOR at -26.11 -188.25 1003.55   //-26.1168,-188.2596,1003.5469
+wait 1500   
+0972: put_actor $PLAYER_ACTOR at 378.01 -1800.55 4.86
+wait 100
+0AF9: samp say_msg "/drugvendor"
+wait 200
+0AB1: @FAKE_KEYPRESS 2 key 0x28 20
+0AB1: @FAKE_KEYPRESS 2 key 0x28 20
+0AB1: @FAKE_KEYPRESS 2 key 0x28 20
+0AB1: @FAKE_KEYPRESS 2 key 0x28 20
+0AB1: @FAKE_KEYPRESS 2 key 0x28 20
+wait 100
+0B47: samp close_current_dialog_with_button 1
+wait 200
+0B4B: samp set_current_dialog_editbox_text "5"
+wait 100
+0B47: samp close_current_dialog_with_button 1
+wait 200
+0972: put_actor $PLAYER_ACTOR at 1955.04 199.45 31.85
+wait 500
+for 0@ = 0 to 4 step 1
+    0AF9: samp say_msg "/plantseed"
+    wait 500
+end
+for 0@ = 0 to 4 step 1
+    0AF9: samp say_msg "/fertilize"
+    wait 500
+end
+30@ = 0
+
+:gotomain
+goto @MAIN
+
+:wnn
+30@ = 1 
+SAMP.CmdRet
+
+:drugvendor
+30@ = 2 
+SAMP.CmdRet
+
+:weedfarm
+30@ = 3 
+SAMP.CmdRet
+
+
+:FAKE_KEYPRESS
+if 0AA2: 2@ = load_library "User32.dll"
+then
+    if 0AA4: 2@ = get_proc_address "keybd_event" library 2@
+    then
+        0AA5: call 2@ num_params 4 pop 0 0 0 0 0@
+        wait 1@
+        0AA5: call 2@ num_params 4 pop 0 0 0x02 0 0@
+    end
+end
+0AB2: ret 0
